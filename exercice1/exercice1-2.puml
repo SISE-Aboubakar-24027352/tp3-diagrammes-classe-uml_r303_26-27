@@ -1,0 +1,59 @@
+@startuml 
+package Association <<Rectangle>> {
+  class A{
+  b: B
+  }
+  
+  class B{
+    a: A
+  }
+  
+  A -- B
+}
+
+package Aggragation <<Rectangle>> {
+  class A{
+  b: B
+  }
+  
+  class B{}
+  
+  A o-- B : A_UN
+}
+
+package Composition <<Rectangle>> {
+  class A{
+  b: B
+  }
+  
+  class B{}
+  
+  A *-- B
+}
+
+
+package Heritage <<Rectangle>> {
+  class A{}
+  
+  class B{}
+  
+  A <-- B : EST_UN
+}
+
+package Dépendance <<Rectangle>> {
+  class A{}
+  
+  class B{
+    +m(a: A)
+  }
+  
+  A <.. B : m
+}
+
+package Implementation <<Rectangle>> {
+  class A{}
+  class B{}
+  
+  A <|.. B
+}
+@enduml

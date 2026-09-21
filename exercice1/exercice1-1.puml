@@ -1,0 +1,51 @@
+@startuml
+abstract class Article
+class Livre
+class CD
+class Client
+class Commande
+
+Article <|-- Livre : <<extends>>
+Article <|-- CD : <<extends>>
+
+Client "1" -- "0..*" Commande : passe
+Commande "1..*" -- "0..1" Article : contient
+
+class CompagnieAerienne
+class Vol
+
+CompagnieAerienne "1..*" -- "1..*" Vol : propose
+
+class Personne
+
+Personne "0..1" -- "0..1" Personne : est marié(e) à
+
+
+class Document {
+  +imprimer(Out: Imprimante&): void
+}
+
+class Imprimante{
+  - nom: string
+  + getNom(): string
+}
+
+note as Solution2
+imprimer(Imprimante &Out): void
+Une autre solution viable mais redondante avec 'imprimer()'.
+end note
+
+Document ..> Imprimante : imprime  ()
+
+Solution2 --- Document
+
+class Repertoire
+class Fichier
+
+Repertoire "1" *-- "0..*" Fichier : contient
+
+class Piece
+class Mur
+
+Piece "0..*" -- "1..*" Mur : contient
+@enduml
