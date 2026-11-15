@@ -1,0 +1,127 @@
+@startuml
+title Gestion d'une bibliothèque universitaire
+
+enum CycleEtudes {
+    LICENCE
+    MASTER
+    DOCTORAT
+}
+
+enum GenreLitteraire {
+    ROMAN
+    POESIE
+    THEATRE
+    FANTASTIQUE
+    AUTRE
+}
+
+
+abstract class Adherent {
+    - prenom : String
+    - nom : String
+    - adressePostale : String
+    - adresseMail : String
+    - dateAdhesion : LocalDate
+    - inscrit : boolean
+    + inscrire() : void
+    + desinscrire() : void
+    + emprunter(volume : Volume, dateRetour : LocalDate) : Emprunt
+}
+
+class Etudiant {
+    - numeroEtudiant : String
+}
+
+class Professeur {
+    - numen : String
+}
+
+Adherent <|-- Etudiant
+Adherent <|-- Professeur
+
+abstract class Document {
+    - numero : int
+    - titre : String
+}
+
+class Journal {
+    - dateParution : LocalDate
+}
+
+abstract class Volume {
+    - auteur : String
+    - titre : String
+    - numero : int
+    + estDisponible() : boolean
+    + liberer() : void
+    + setEmpruntEnCours(emprunt : Emprunt) : void
+    + getNumero : int
+    + getTitre : String
+    + getAuteur() : String
+}
+
+class Livre {
+    - genre : GenreLitteraire
+}
+
+class Dictionnaire {
+    - thematique : String
+}
+
+class ManuelScolaire {
+    - matiere : String
+    - cycle : CycleEtudes
+}
+
+Document <|-- Journal
+Document <|-- Volume
+
+Volume <|-- Livre
+Volume <|-- Dictionnaire
+Volume <|-- ManuelScolaire
+
+
+class Emprunt {
+    - dateEmprunt : LocalDate
+    - dateRestitutionPrevue : LocalDate
+    - dateRestitutionEffective : LocalDate
+    + prolonger(nouvelleDate : LocalDate) : void
+    + restituer() : void
+    + estEnCours() : boolean
+}
+
+Adherent "1" -- "0..*" Emprunt : effectue
+Volume "1" -- "0..*" Emprunt : concerne
+
+class Bibliotheque {
+    - nom : String
+    + ajouterDocument(d : Document) : void
+    + ajouterAdherent(a : Adherent) : void
+    + rechercherDocument(numero : int) : Document
+    + emprunter(a : Adherent, v : Volume) : Emprunt
+}
+
+Bibliotheque "1" o-- "0..*" Document : catalogue
+Bibliotheque "1" o-- "0..*" Adherent : membres
+Bibliotheque "1" o-- "0..*" Emprunt : gestion
+
+note right of Adherent
+  Un adhérent peut emprunter
+  au maximum 4 volumes
+  simultanément.
+end note
+
+note right of Volume
+  Un volume ne peut être
+  emprunté que par un
+  seul adhérent à la fois.
+end note
+
+note bottom of Document
+  Tous les documents peuvent
+  être consultés.
+  Seuls les volumes peuvent
+  être empruntés.
+end note
+
+@enduml
